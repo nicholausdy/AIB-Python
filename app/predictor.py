@@ -7,9 +7,9 @@ from util.file_util import json_loader
 
 from pre_processor import prepare_data
 
-asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
-
 import os
+
+asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 
 BASE_DIR = os.getcwd()
 
