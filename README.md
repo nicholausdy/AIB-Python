@@ -7,7 +7,7 @@ This app receives message from API server, process the request, then send the re
 2. NPM
 3. pm2
 4. Git LFS
-5. NATS message broker
+5. NATS message broker (https://docs.nats.io/nats-server/installation)
 
 ## How to Run
 Clone the repo
