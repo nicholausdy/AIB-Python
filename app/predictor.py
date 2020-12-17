@@ -6,14 +6,18 @@ from util.file_util import json_loader
 
 from pre_processor import prepare_data
 
-def load_model(dir):
+import os
+
+BASE_DIR = os.getcwd()
+
+def load_model(directory):
   try:
-    model = load(dir)
+    model = load(directory)
     return model
   except Exception as error:
     raise Exception(error)
 
-rforest_regressor = load_model('./files/tuned_random_forest_model.joblib')
+rforest_regressor = load_model(BASE_DIR + '/app/files/tuned_random_forest_model.joblib')
 
 # full pipeline from data preparation to prediction
 async def predict(input_dict):
@@ -30,7 +34,7 @@ async def predict(input_dict):
 
 def load_feature_importance():
   try:
-    obj = json_loader('./files/top_adr_predictors.json')
+    obj = json_loader(BASE_DIR + '/app/files/top_adr_predictors.json')
     feature_list = []
 
     i = 0
@@ -61,11 +65,11 @@ async def feature_importance():
 #   input_dict_full = {
 #     'hotel':'Resort Hotel',
 #     'is_canceled': 0,
-#     'arrival_date_year': 2015,
+#     'arrival_date_year': 2020,
 #     'arrival_date_month':'July',
 #     'arrival_date_week_number':27,
 #     'arrival_date_day_of_month':1,
-#     'meal':'BB',
+#     'meal':'HB',
 #     'country':'Europe',
 #     'market_segment':'Direct',
 #     'distribution_channel':'Direct',
@@ -76,7 +80,7 @@ async def feature_importance():
 #     'agent':9,
 #     'customer_type':'Transient',
 #     'reservation_status':'Check-Out',
-#     'reservation_status_date_year':2015,
+#     'reservation_status_date_year':2021,
 #     'reservation_status_date_month':7,
 #     'reservation_status_date_day':2,
 #     'lead_time':7,

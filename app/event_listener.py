@@ -4,12 +4,12 @@ from nats.aio.client import Client as NATS
 from nats.aio.errors import ErrConnectionClosed, ErrTimeout, ErrNoServers
 
 import os
-from pathlib import Path
 from dotenv import load_dotenv
 
 import predictor
 
-env_path = Path('.') / '.env'
+BASE_DIR = os.getcwd()
+env_path = BASE_DIR + '/app/.env'
 load_dotenv(dotenv_path=env_path)
 
 url = os.getenv('NATS_URL')

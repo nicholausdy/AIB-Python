@@ -5,13 +5,16 @@ import asyncio
 from util.file_util import json_loader
 from util.async_util import async_transform
 
+import os
+BASE_DIR = os.getcwd()
+
 def load_preliminary_json():
   try:
-    mean_dict = json_loader('./files/mean_cont.json')
+    mean_dict = json_loader(BASE_DIR + '/app/files/mean_cont.json')
 
-    std_dict  = json_loader('./files/std_cont.json')
+    std_dict  = json_loader(BASE_DIR + '/app/files/std_cont.json')
 
-    column_order = json_loader('./files/column_order.json')
+    column_order = json_loader(BASE_DIR + '/app/files/column_order.json')
 
     return mean_dict, std_dict, column_order
 
@@ -34,6 +37,32 @@ def dict_to_dataframe(input_dict):
   
   except Exception as error:
     raise Exception(error)
+
+async def year_mapper(input_dict, key):
+  try:
+    if (input_dict[key] < 2019):
+      input_dict[key] = 2014
+      return input_dict
+
+    if (input_dict[key] > 2022):
+      input_dict[key] = 2017
+      return input_dict
+
+    ref_dict = {
+      2019 : 2014,
+      2020 : 2015,
+      2021 : 2016,
+      2022 : 2017
+    }
+    key_1 = input_dict[key]
+    input_dict[key] = ref_dict[key_1]
+
+    return input_dict
+
+  except Exception as error:
+    raise Exception(error)
+
+
 
 def normalize(input_dict):
   try:
@@ -190,6 +219,9 @@ async def convert_to_category_parallel(input_dict):
 
 async def prepare_data(input_dict):
   try:
+    input_dict = await year_mapper(input_dict, 'arrival_date_year')
+    input_dict = await year_mapper(input_dict, 'reservation_status_date_year')
+
     input_dict_cont = { 
       'lead_time':input_dict['lead_time'],
       'stays_in_weekend_nights': input_dict['stays_in_weekend_nights'],
