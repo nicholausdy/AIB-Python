@@ -110,7 +110,8 @@ async def bin_parallel(input_dict):
       async_transform(bin_single_df, df_result_list[3], 'agent', bins_agent, bins_labels)
     )
 
-    result_df = pd.concat(result_list, axis=1)
+    # result_df = pd.concat(result_list, axis=1)
+    result_df = await async_transform(concat_df_on_column, result_list)
     return result_df
 
   except Exception as error:
@@ -134,6 +135,20 @@ def one_hot_encode_from_df(df, key, list_categories):
     new_df = pd.get_dummies(df[key], prefix=key)
 
     return new_df
+  except Exception as error:
+    raise Exception(error)
+
+def concat_df_on_column(list_df):
+  try:
+    result_df = pd.concat(list_df, axis=1)
+    return result_df
+  except Exception as error:
+    raise Exception(error)
+
+def reindex_df(df,columns_list):
+  try:
+    result_df = df.reindex(columns=columns_list)
+    return result_df
   except Exception as error:
     raise Exception(error)
 
@@ -211,7 +226,8 @@ async def convert_to_category_parallel(input_dict):
     # combine multiple lists of dataframe to single list of dataframe
     result_list = bools + one_hot_result_list_1 + one_hot_result_list_2 + one_hot_result_list_3 + one_hot_result_list_4
 
-    result_df = pd.concat(result_list, axis=1)
+    # result_df = pd.concat(result_list, axis=1)
+    result_df = await async_transform(concat_df_on_column, result_list)
     return result_df
 
   except Exception as error:
@@ -266,8 +282,10 @@ async def prepare_data(input_dict):
       convert_to_category_parallel(input_dict_cat)
     )
 
-    result_df = pd.concat(result_list, axis=1)
-    ordered_df = result_df.reindex(columns=column_order['order'])
+    # result_df = pd.concat(result_list, axis=1)
+    result_df = await async_transform(concat_df_on_column, result_list)
+    # ordered_df = result_df.reindex(columns=column_order['order'])
+    ordered_df = await async_transform(reindex_df, result_df, column_order['order'])
     
     return ordered_df
 
