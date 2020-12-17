@@ -6,3 +6,5 @@ lib/
 local/
 share/
 app/.env
+lib64
+pyvenv.cfg
