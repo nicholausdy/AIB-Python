@@ -1,10 +1,13 @@
 from joblib import load
 import asyncio
+import uvloop
 
 from util.async_util import async_transform
 from util.file_util import json_loader
 
 from pre_processor import prepare_data
+
+asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 
 import os
 

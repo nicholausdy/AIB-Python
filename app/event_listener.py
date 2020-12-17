@@ -1,4 +1,5 @@
 import asyncio
+import uvloop
 import json
 from nats.aio.client import Client as NATS
 from nats.aio.errors import ErrConnectionClosed, ErrTimeout, ErrNoServers
@@ -7,6 +8,8 @@ import os
 from dotenv import load_dotenv
 
 import predictor
+
+asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 
 BASE_DIR = os.getcwd()
 env_path = BASE_DIR + '/app/.env'

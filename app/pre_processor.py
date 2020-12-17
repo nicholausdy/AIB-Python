@@ -1,9 +1,12 @@
 import pandas as pd
 from pandas.api.types import CategoricalDtype
 import asyncio
+import uvloop
 
 from util.file_util import json_loader
 from util.async_util import async_transform
+
+asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 
 import os
 BASE_DIR = os.getcwd()

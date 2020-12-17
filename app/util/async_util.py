@@ -1,5 +1,8 @@
 from concurrent.futures import ThreadPoolExecutor
-from asyncio import get_event_loop
+import asyncio
+import uvloop
+
+asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 
 def threadExecutor():
   try:
@@ -13,7 +16,7 @@ executor = threadExecutor()
 
 async def async_transform(funcName, *params):
   try:
-    loop = get_event_loop()
+    loop = asyncio.get_event_loop()
     result = await loop.run_in_executor(executor, funcName, *params)
     return result
   except Exception as error:
